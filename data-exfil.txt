@@ -11,7 +11,7 @@
 1 - Monke Improvise: Using Telegram API along with Nekobin.
 2 - What about detections?
 3 - Monke Improvise Again: Using Nekobin along with Self-Hosted Hastebin.
-4 - Resources.
+4 - My 2 cents.
 
 0 - Background:
 
