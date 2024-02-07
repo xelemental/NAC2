@@ -1,1 +1,46 @@
+|=-----------------------------------------------------------------------=|
+|=----------------=[Exfiltration using Nekobin TG API]=------------------=|
+|=-----------------------------------------------------------------------=|
+|=----------------------=[ElementalX]=-----------------------------------=|
+|=-----------------------------------------------------------------------=|
+|=-----------------------------------------------------------------------=|
 
+-- [Table Of Contents]
+
+0 - Background.
+1 - Monke Improvise: Using Telegram API along with Nekobin.
+2 - What about detections?
+3 - Monke Improvise Again: Using Nekobin along with Self-Hosted Hastebin.
+4 - Resources.
+
+0 - Background:
+
+Recently, I have been analyzing some malware that uses Telegram for exfiltration. In a previous analysis, I discussed how we can recover stolen logs and exfiltrated data using a simple Python script embedded in our tool known as TeleCommd. You can find that on the RIXED LABS page. Essentially, if someone has a channel ID where the logs were dumped and the Telegram bot token, they can use the forward logs method from the Telegram API and bot developer docs. They can then use a dummy Telegram account to dump the logs. However, this method is risky as analysts or any third party could easily eavesdrop and access sensitive data. To address this, I'm providing a walkthrough for using Nekobin, a text-sharing service, to forward exfiltrated data to Telegram. I will describe the advantages of chaining Nekobin with Telegram.
+
+1 -  Monke Improvise: Using Telegram API along with Nekobin:
+
+If you check the code, there are four different functions mimicking a random stealer project from GitHub known as CStealer. The four functions are as follows:
+
+- checkRegistry: This function detects the presence of a Virtual Machine (VM) by examining the Windows registry. Once it finds the specific subkey, it returns whether a VM is found or not. This function is ideally a part of the malcode.
+
+- enumerateProcesses: This function enumerates the list of processes using CreateToolhelp32Snapshot and returns the list of processes running on a computer along with their PIDs. This feature is common in simple malcode.
+
+- createNekobinDocument: This function compiles the data collected by the previous two functions and sends it to Telegram using the Telegram API.
+
+So, what's the advantage of using Nekobin over traditional Pastebin?
+
+- Unlike Pastebin, Nekobin's URLs can be limited to a user by passwords when the paste visibility is set to Unlisted. However, once an operator completes their post-engagement, they can still recover logs. Using Nekobin, a normal data post dissolves within a maximum time limit of 10-15 minutes from the minute of generation using this NAC2 Go code. Once the message, aka the Nekobin paste, is sent to Telegram, it can work like an agent callback from the target machine. One can simply scrape that data and store it. In case someone logs the links after an hour, they would never be able to recover the exfiltrated data if they have the Nekobin URL using the forward message method.
+
+2 - What about detections?
+
+Detection engineers are smart and can still detect the Telegram URL, flagging the binary. One can use self-hosted text-sharing services like Hastebin, where the paste is stored for the next seven days instead of forwarding the Nekobin exfil link to Telegram.
+
+3 - Monke Improvise Again: Using Nekobin along with Self-Hosted Hastebin.
+
+This is a TO-DO, and I will be adding a simple Golang script for the same.
+
+//TO-DO
+
+4 - My 2 cents.
+
+This is nothing nearly research; it's just that I've been bored and, with my limited knowledge sphere, decided to come up with this simple POC for data exfil. Thank you to Soumyadeep Basu (@fr0sb1te) for the help.
