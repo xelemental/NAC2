@@ -147,7 +147,7 @@ func createNekobinDocument(processes []map[string]interface{}, vmDetected bool) 
 	if result, ok := jsonResponse["result"].(map[string]interface{}); ok {
 		if key, ok := result["key"].(string); ok {
 			nekobinURL := fmt.Sprintf("https://nekobin.com/%s", key)
-			fmt.Println("Nekobin URL:", nekobinURL)
+			//fmt.Println("Nekobin URL:", nekobinURL) In case of debugging 
 			return nekobinURL
 		}
 	}
